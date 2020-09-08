@@ -16,10 +16,11 @@ n_samples = _y.shape[0]
 n_splits = 2
 n_repeats = 5
 
-quantities = np.linspace(.01, 1, 5)
+quantities = np.linspace(.01, 1, 20)
 
 print("%i input samples" % n_samples)
 
+all_scores = []
 for quantity in quantities:
     scores = []
     n = (n_samples * quantity).astype(int)
@@ -81,3 +82,9 @@ for quantity in quantities:
 
     print(np.mean(scores, axis=0))
     print(np.std(scores, axis=0))
+
+    all_scores.append(scores)
+
+all_scores = np.array(all_scores)
+print(all_scores, all_scores.shape)
+np.save("e1", all_scores)
