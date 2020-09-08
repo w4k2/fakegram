@@ -27,9 +27,6 @@ for fold, (train, test) in enumerate(skf.split(corpus_a, y)):
     y_train = y[train]
     y_test = y[test]
 
-    """
-    A
-    """
     # Extractor
     extractor_a = CountVectorizer().fit(corpus_a_train)
     extractor_b = CountVectorizer().fit(corpus_b_train)
@@ -39,21 +36,24 @@ for fold, (train, test) in enumerate(skf.split(corpus_a, y)):
     X_test_a = extractor_a.transform(corpus_a_test).toarray()
     X_test_b = extractor_b.transform(corpus_b_test).toarray()
 
-    # Classifier
+    # Build classifiers
     clf_a = MLPClassifier(random_state=1410)
     clf_b = MLPClassifier(random_state=1410)
 
     clf_a.fit(X_train_a, y_train)
     clf_b.fit(X_train_b, y_train)
 
+    # Make ensemble
     esm = np.array([clf_a.predict_proba(X_test_a),
                     clf_b.predict_proba(X_test_b)])
     f_esm = np.mean(esm, axis=0)
 
+    # Establish predictions
     y_pred_a = clf_a.predict(X_test_a)
     y_pred_b = clf_b.predict(X_test_b)
     y_pred_c = np.argmax(f_esm, axis=1)
 
+    # Calculate scores
     score_a = balanced_accuracy_score(y_test, y_pred_a)
     score_b = balanced_accuracy_score(y_test, y_pred_b)
     score_c = balanced_accuracy_score(y_test, y_pred_c)
