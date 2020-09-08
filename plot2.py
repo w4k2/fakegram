@@ -19,12 +19,12 @@ fig, ax = plt.subplots(1, 1, figsize=(8, 5))
 for i, label in enumerate(labels):
     print(i, label)
     ax.plot(quantities, results_11[i],
-            label="%s (1,1)" % label, ls=':', c=colors[i])
+            label="%s (1,1)" % label, ls='--', c=colors[i])
 
 for i, label in enumerate(labels):
     print(i, label)
     ax.plot(quantities, results_12[i],
-            label="%s (1,2)" % label, ls='--', c=colors[i])
+            label="%s (1,2)" % label, ls=':', c=colors[i])
 
 
 for i, label in enumerate(labels):
