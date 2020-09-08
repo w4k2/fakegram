@@ -4,7 +4,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 
 df = pd.read_csv('data_aAa.csv')
-corpus = df.values[:, 2]
+corpus = df.values[:, 2].astype('U')
 y = df.values[:, -1]
 print(corpus)
 print(y)
@@ -14,6 +14,10 @@ corpus_train, corpus_test, y_train, y_test = train_test_split(
 
 # Extractor
 print(corpus_train)
-#extractor = CountVectorizer().fit(corpus_train)
+extractor = CountVectorizer().fit(corpus_train)
 
 print("Extracted")
+
+X_train = extractor.transform(corpus_train)
+
+print(X_train, X_train.shape)
