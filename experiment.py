@@ -39,10 +39,16 @@ print(X_train_a.shape, y_train.shape)
 clf_a.fit(X_train_a, y_train)
 clf_b.fit(X_train_b, y_train)
 
+esm = np.array([clf_a.predict_proba(X_test_a),
+                clf_b.predict_proba(X_test_b)])
+f_esm = np.mean(esm, axis=0)
+
 y_pred_a = clf_a.predict(X_test_a)
 y_pred_b = clf_b.predict(X_test_b)
+y_pred_c = np.argmax(f_esm, axis=1)
 
 score_a = balanced_accuracy_score(y_test, y_pred_a)
 score_b = balanced_accuracy_score(y_test, y_pred_b)
+score_c = balanced_accuracy_score(y_test, y_pred_c)
 
-print(score_a, score_b)
+print(score_a, score_b, score_c)
