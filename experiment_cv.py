@@ -16,8 +16,6 @@ n_samples = _y.shape[0]
 n_splits = 2
 n_repeats = 5
 
-# quantities = np.linspace(.01, 1, 20)
-# quantities = np.array([.01, .02, .05, .1, .25, .50, .75, 1.])
 quantities = np.array([.0004, .0036, .0068, .01, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.])
 print("%i input samples" % n_samples)
 
