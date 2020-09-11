@@ -14,14 +14,14 @@ _y = df_a.values[:, -1].astype(int)
 
 n_samples = _y.shape[0]
 n_splits = 2
-n_repeats = 2
+n_repeats = 5
 n_gram_max = 5
 
 print("%i input samples" % n_samples)
 
 all_scores = []
 
-quantity = .15
+quantity = .20
 
 # FOLDS x METHOD x I x J
 scores = np.zeros((n_splits*n_repeats, 2, n_gram_max, n_gram_max))
