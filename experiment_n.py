@@ -15,7 +15,7 @@ _y = df_a.values[:, -1].astype(int)
 n_samples = _y.shape[0]
 n_splits = 2
 n_repeats = 5
-n_gram_max = 5
+n_gram_max = 7
 
 print("%i input samples" % n_samples)
 
