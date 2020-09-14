@@ -16,10 +16,10 @@ ax[0].set_title("STRUCT")
 ax[1].set_title("WORDS")
 
 for z in range(2):
-    ax[z].set_xticks(range(5))
-    ax[z].set_xticklabels(np.array(list(range(5)))+1)
-    ax[z].set_yticks(range(5))
-    ax[z].set_yticklabels(np.array(list(range(5)))+1)
+    ax[z].set_xticks(range(7))
+    ax[z].set_xticklabels(np.array(list(range(7)))+1)
+    ax[z].set_yticks(range(7))
+    ax[z].set_yticklabels(np.array(list(range(7)))+1)
     ax[z].set_ylabel("from")
     ax[z].set_xlabel("to")
 for i, v in enumerate(a):
