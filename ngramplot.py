@@ -47,7 +47,6 @@ for i, v in enumerate(c):
             ax[2].text(j, i, "%.3f" % vv, color='white',
                        ha='center', va='center')
 
-
 plt.tight_layout()
 plt.savefig("ngramplot.png")
 plt.savefig("ngramplot.eps")
