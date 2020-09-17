@@ -8,9 +8,13 @@ quantities = np.array([.01, .02, .05, .1, .25, .50, .75, 1.])
 
 print(results, results.shape)
 
-labels = ["STRUCT", "WORDS", "ENSEMBLE"]
+
+red = (249/255, 91/255, 62/255)
+black = (.2, .2, .2)
+blue = (62/255, 91/255, 249/255)
+labels = ["Alphabet Flatting (1,2)", "Words (1,1)", "Ensemble"]
 lss = ['-', "-", "-"]
-css = ["blue", "red", "black"]
+css = [blue, red, black]
 
 fig, ax = plt.subplots(1,1, figsize=(8,5))
 for i, label in enumerate(labels):
@@ -24,7 +28,7 @@ ax.set_ylabel("Balanced accuracy score")
 ax.grid(ls=":")
 ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
-plt.legend(ncol=3, loc=8, frameon=False)
+plt.legend(ncol=1, loc=4, frameon=False, facecolor='red')
 
 plt.tight_layout()
 plt.savefig("foo.png")

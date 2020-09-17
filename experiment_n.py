@@ -17,7 +17,7 @@ _y = df_a.values[:, -1].astype(int)
 n_samples = _y.shape[0]
 n_splits = 2
 n_repeats = 5
-n_gram_max = 4
+n_gram_max = 7
 
 print("%i input samples" % n_samples)
 
@@ -65,7 +65,7 @@ for repeat in range(n_repeats):
                 X_train_c = extractor_c.transform(corpus_c_train).toarray()
                 X_test_a = extractor_a.transform(corpus_a_test).toarray()
                 X_test_b = extractor_b.transform(corpus_b_test).toarray()
-                X_test_c = extractor_b.transform(corpus_c_test).toarray()
+                X_test_c = extractor_c.transform(corpus_c_test).toarray()
 
                 # Build classifiers
                 clf_a = MLPClassifier(random_state=1410)
