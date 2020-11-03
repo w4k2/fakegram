@@ -26,5 +26,4 @@ print(X_words.shape)
 print(X_struct.shape)
 
 np.save("data/y", y)
-np.save("data/X_words", X_words)
-np.save("data/X_struct", X_struct)
+np.savez_compressed("data/X_words", words=X_words, struct=X_struct)

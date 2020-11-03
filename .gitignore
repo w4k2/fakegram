@@ -1,4 +1,4 @@
-data/*.npy
+data/*.npz
 metex.py
 example.png
 example.py
