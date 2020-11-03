@@ -8,8 +8,19 @@ from sklearn.utils import resample
 
 df_a = pd.read_csv('data_aAa.csv')
 df_b = pd.read_csv('data.csv')
+
+# print(df_a)
+# print(df_b)
+
+# 4-body, 3-author, 2-title
 _corpus_a = df_a.values[:, 2].astype('U')
-_corpus_b = df_b.values[:, 2].astype('U')
+_corpus_b = df_b.values[:, 1].astype('U')
+
+print(_corpus_a[0][:50], len(_corpus_a[0]))
+print(_corpus_b[0][:50], len(_corpus_b[0]))
+
+# exit()
+
 _y = df_a.values[:, -1].astype(int)
 
 n_samples = _y.shape[0]
@@ -32,7 +43,8 @@ for quantity in quantities:
                                          n_samples=n, stratify=_y,
                                          replace=False)
 
-        skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=1410)
+        skf = StratifiedKFold(n_splits=n_splits, shuffle=True,
+                              random_state=1410)
 
         for fold, (train, test) in enumerate(skf.split(corpus_a, y)):
             corpus_a_train = corpus_a[train]
@@ -44,9 +56,9 @@ for quantity in quantities:
 
             # Extractor
             extractor_a = CountVectorizer(max_features=100,
-                                          ngram_range=(1, 1)).fit(corpus_a_train)
+                                          ngram_range=(1, 4)).fit(corpus_a_train)
             extractor_b = CountVectorizer(max_features=100,
-                                          ngram_range=(1, 1)).fit(corpus_b_train)
+                                          ngram_range=(1, 4)).fit(corpus_b_train)
 
             X_train_a = extractor_a.transform(corpus_a_train).toarray()
             X_train_b = extractor_b.transform(corpus_b_train).toarray()

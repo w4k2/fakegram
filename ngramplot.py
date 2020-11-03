@@ -48,5 +48,5 @@ for i, v in enumerate(c):
                        ha='center', va='center')
 
 plt.tight_layout()
-plt.savefig("ngramplot.png")
+plt.savefig("ngramplot2.png")
 plt.savefig("ngramplot.eps")

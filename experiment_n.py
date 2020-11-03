@@ -10,13 +10,13 @@ df_a = pd.read_csv('data_aAa.csv')
 df_b = pd.read_csv('data.csv')
 df_c = pd.read_csv('data_bbb.csv')
 _corpus_a = df_a.values[:, 2].astype('U')
-_corpus_b = df_b.values[:, 2].astype('U')
+_corpus_b = df_b.values[:, 1].astype('U')
 _corpus_c = df_c.values[:, 2].astype('U')
 _y = df_a.values[:, -1].astype(int)
 
 n_samples = _y.shape[0]
 n_splits = 2
-n_repeats = 5
+n_repeats = 2
 n_gram_max = 7
 
 print("%i input samples" % n_samples)
