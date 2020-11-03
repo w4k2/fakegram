@@ -62,5 +62,3 @@ for repeat in range(n_repeats):
                                         X_transformed)
 
                                 print(filename, X_transformed.shape)
-
-                            exit()
