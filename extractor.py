@@ -61,4 +61,6 @@ for key in keys:
                                         X_transformed)
 
                                 print(filename, X_transformed.shape)
+                                X_transformed = None
+                resampled = None
         X = None
