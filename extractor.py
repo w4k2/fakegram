@@ -7,9 +7,7 @@ from sklearn.utils import resample
 """
 Parameters
 """
-keys = ['author', 'title', 'text']
-#keys = ['author', 'title']
-keys = ['text']
+keys = ['text', 'author', 'title']
 i_s = ['words', 'struct']
 n_range = 6
 n_splits = 2
