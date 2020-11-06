@@ -50,6 +50,7 @@ for key in keys:
                                                                y[resampled])):
                     print("##### Fold %i" % fold)
                     preds = []
+                    probas = []
                     for n_start in range(n_range):
                         for n_end in range(n_range):
                             if n_start <= n_end:
@@ -65,18 +66,24 @@ for key in keys:
                                 clf.fit(X[train], y[resampled][train])
 
                                 y_pred = clf.predict(X[test])
+                                proba = clf.predict_proba(X[test])
 
                                 score = balanced_accuracy_score(y[resampled][test], y_pred)
 
                                 print("%.3f | %s" % (score, filename), y_pred.shape)
 
                                 preds.append(y_pred)
+                                probas.append(proba)
 
                                 X = None
 
                     preds = np.array(preds)
-                    print(filename[:-4], "%.3f" % np.std(preds), preds.shape)
+                    probas = np.array(probas)
+                    print(preds.shape, probas.shape)
+                    print(filename[:-4], "%.3f" % np.std(preds), preds.shape, probas.shape)
                     np.save("predictions/%s" % filename[:-4], preds)
+                    np.save("probas/%s" % filename[:-4], probas)
+
                     # exit()
 
                 resampled = None
