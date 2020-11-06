@@ -4,6 +4,10 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.utils import resample
 from scipy.sparse import csr_matrix
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import balanced_accuracy_score
+import scipy as sp
+from sklearn.base import clone
 
 """
 Parameters
@@ -24,9 +28,12 @@ s_idx = np.array(range(len(y))).astype(int)
 
 skf = StratifiedKFold(n_splits=n_splits, random_state=1410, shuffle=True)
 
+base_clf = MLPClassifier(random_state=1410)
+print(base_clf)
+
 # Extraction loop
 for key in keys:
-    # print("Key %s" % key)
+    print("Key %s" % key)
     for i, base in enumerate([0, 1]):
         for repeat in range(n_repeats):
             print("# Repeat %i" % repeat)
@@ -40,7 +47,8 @@ for key in keys:
                 # print(resampled.shape)
                 for fold, (train, test) in enumerate(skf.split(y[resampled],
                                                                y[resampled])):
-                    # print("# Fold %i" % fold)
+                    print("# Fold %i" % fold)
+                    preds = []
                     for n_start in range(n_range):
                         for n_end in range(n_range):
                             if n_start <= n_end:
@@ -48,15 +56,26 @@ for key in keys:
 
                                 filename = "%i_%i_%i_%s_%s_%i_%i" % (repeat, q_id, fold, key, i_s[i], *n_ran)
 
-                                X_transformed = np.load("extracted/%s.npy" % filename, allow_pickle=True)
-                                print(type(X_transformed))
-                                a = X_transformed
+                                X = np.load("extracted/%s.npy" % filename, allow_pickle=True)[()].A
 
-                                print(a)
-                                #print(a[0])
-                                print(filename, X_transformed.shape)
-                                exit()
+                                # print(X.shape)
 
-                                X_transformed = None
+                                clf = clone(base_clf)
+                                clf.fit(X[train], y[resampled][train])
+
+                                y_pred = clf.predict(X[test])
+
+                                score = balanced_accuracy_score(y[resampled][test], y_pred)
+
+                                print("%.3f | %s" % (score, filename), y_pred.shape)
+
+                                preds.append(y_pred)
+
+                                X = None
+
+                    preds = np.array(preds)
+                    print(filename[:-4], "%.3f" % np.std(preds), preds.shape)
+                    np.save("predictions/%s" % filename[:-4], preds)
+                    exit()
+
                 resampled = None
-        X = None
