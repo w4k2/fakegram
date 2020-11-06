@@ -38,7 +38,7 @@ for key in keys:
         for repeat in range(n_repeats):
             print("# Repeat %i" % repeat)
             for q_id, quantity in enumerate(quantities):
-                # print(q_id, quantity)
+                print("# Quantity %.2f [%i]" % (quantity, q_id))
                 # Quantity resampling
                 resampled = resample(s_idx, n_samples=int(len(y)*quantity),
                                      replace=False, stratify=y,
@@ -76,6 +76,6 @@ for key in keys:
                     preds = np.array(preds)
                     print(filename[:-4], "%.3f" % np.std(preds), preds.shape)
                     np.save("predictions/%s" % filename[:-4], preds)
-                    exit()
+                    # exit()
 
                 resampled = None
