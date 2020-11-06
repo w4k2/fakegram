@@ -33,12 +33,13 @@ print(base_clf)
 
 # Extraction loop
 for key in keys:
-    print("Key %s" % key)
-    for i, base in enumerate([0, 1]):
+    print("# Key %s" % key)
+    for i, base in enumerate(i_s):
+        print("## Base %s" % base)
         for repeat in range(n_repeats):
-            print("# Repeat %i" % repeat)
+            print("### Repeat %i" % repeat)
             for q_id, quantity in enumerate(quantities):
-                print("# Quantity %.2f [%i]" % (quantity, q_id))
+                print("#### Quantity %.2f [%i]" % (quantity, q_id))
                 # Quantity resampling
                 resampled = resample(s_idx, n_samples=int(len(y)*quantity),
                                      replace=False, stratify=y,
@@ -47,7 +48,7 @@ for key in keys:
                 # print(resampled.shape)
                 for fold, (train, test) in enumerate(skf.split(y[resampled],
                                                                y[resampled])):
-                    print("# Fold %i" % fold)
+                    print("##### Fold %i" % fold)
                     preds = []
                     for n_start in range(n_range):
                         for n_end in range(n_range):
