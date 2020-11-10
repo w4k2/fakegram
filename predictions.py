@@ -25,9 +25,7 @@ df_words = pd.read_csv('data/data.csv')
 y = df_words['label'].values.astype(int)
 
 s_idx = np.array(range(len(y))).astype(int)
-
 skf = StratifiedKFold(n_splits=n_splits, random_state=1410, shuffle=True)
-
 base_clf = MLPClassifier(random_state=1410)
 print(base_clf)
 
