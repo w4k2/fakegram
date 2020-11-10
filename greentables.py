@@ -29,8 +29,15 @@ skf = StratifiedKFold(n_splits=n_splits, random_state=1410, shuffle=True)
 base_clf = MLPClassifier(random_state=1410)
 print(base_clf)
 
+# Scores
+# KEYS x EXTRACTOR x REPEATS x FOLDS x QUANTITIES x FROM x TO
+scores = np.zeros((len(keys), len(i_s), n_repeats, n_splits, len(quantities), n_range, n_range))
+
+print(scores.shape)
+
+
 # Extraction loop
-for key in keys:
+for key_id, key in enumerate(keys):
     print("# Key %s" % key)
     for i, base in enumerate(i_s):
         print("## Base %s" % base)
@@ -39,9 +46,8 @@ for key in keys:
             for q_id, quantity in enumerate(quantities):
                 print("#### Quantity %.2f [%i]" % (quantity, q_id))
                 # Quantity resampling
-                resampled = resample(s_idx, n_samples=int(len(y)*quantity),
-                                     replace=False, stratify=y,
-                                     random_state=random_state + repeat)
+                filename = "%i_%i_%s_%s" % (repeat, q_id, key, i_s[i])
+                resampled = np.load("cozio/res_%s.npy" % filename)
 
                 # print(resampled.shape)
                 for fold, (train, test) in enumerate(skf.split(y[resampled],
@@ -49,6 +55,14 @@ for key in keys:
                     print("##### Fold %i" % fold)
                     preds = []
                     probas = []
+
+                    # SAVE TRAIN AND TEST
+                    filename = "%i_%i_%i_%s_%s" % (repeat, q_id, fold, key, i_s[i])
+
+                    print("B", train.shape, test.shape)
+                    train = np.load("cozio/tra_%s.npy" % filename)
+                    test = np.load("cozio/tes_%s.npy" % filename)
+
                     for n_start in range(n_range):
                         for n_end in range(n_range):
                             if n_start <= n_end:
@@ -56,35 +70,11 @@ for key in keys:
 
                                 filename = "%i_%i_%i_%s_%s_%i_%i" % (repeat, q_id, fold, key, i_s[i], *n_ran)
 
-                                """
-                                X = np.load("extracted/%s.npy" % filename, allow_pickle=True)[()].A
-
-                                # print(X.shape)
-
-                                clf = clone(base_clf)
-                                clf.fit(X[train], y[resampled][train])
-
-                                y_pred = clf.predict(X[test])
-                                proba = clf.predict_proba(X[test])
-
-                                score = balanced_accuracy_score(y[resampled][test], y_pred)
-
-                                print("%.3f | %s" % (score, filename), y_pred.shape)
-
-                                preds.append(y_pred)
-                                probas.append(proba)
-
-                                X = None
-                                """
                     preds = np.load("predictions/%s.npy" % filename[:-4])
                     probas = np.load("probas/%s.npy" % filename[:-4])
 
-                    #preds = np.array(preds)
-                    #probas = np.array(probas)
                     print(preds.shape, probas.shape)
                     print(filename[:-4], "%.3f" % np.std(preds), preds.shape, probas.shape)
-                    # np.save("predictions/%s" % filename[:-4], preds)
-                    # np.save("probas/%s" % filename[:-4], probas)
 
                     n_idxx = 0
                     for n_start in range(n_range):
@@ -92,15 +82,20 @@ for key in keys:
                             if n_start <= n_end:
                                 y_pred = preds[n_idxx]
                                 proba = probas[n_idxx]
-                                #preds.append(y_pred)
-                                #probas.append(proba)
 
                                 score = balanced_accuracy_score(y[resampled][test], y_pred)
 
-                                print("%.3f | %s" % (score, filename), y_pred.shape)
+                                #print("%.3f | %s" % (score, filename), y_pred.shape)
+
+
+                                # KEYS x EXTRACTOR x REPEATS x FOLDS x QUANTITIES x FROM x TO
+                                scores[key_id, i, repeat, fold, q_id,
+                                       n_start, n_end] = score
 
                                 n_idxx += 1
 
 
-
+                # exit()
                 resampled = None
+
+np.save("results/green", scores)
