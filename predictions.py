@@ -84,6 +84,4 @@ for key in keys:
                     np.save("predictions/%s" % filename[:-4], preds)
                     np.save("probas/%s" % filename[:-4], probas)
 
-                    # exit()
-
                 resampled = None

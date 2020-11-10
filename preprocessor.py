@@ -5,7 +5,7 @@ Extracting data
 import pandas as pd
 from string import ascii_lowercase, ascii_uppercase
 
-df = pd.read_csv('data.csv')
+df = pd.read_csv('data/data.csv')
 
 for key in ['author', 'title', 'text']:
     for i in ascii_lowercase:
@@ -15,4 +15,4 @@ for key in ['author', 'title', 'text']:
 
 print(df)
 
-df.to_csv('data_struct.csv')
+df.to_csv('data/data_struct.csv')
