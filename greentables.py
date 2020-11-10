@@ -1,11 +1,13 @@
-"""
-To jest ten plik, co robi zielone tabelki.
-"""
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
+from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.utils import resample
+from scipy.sparse import csr_matrix
+from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import balanced_accuracy_score
+import scipy as sp
+from sklearn.base import clone
 
 """
 Parameters
@@ -22,10 +24,10 @@ print("# Load CSV")
 df_words = pd.read_csv('data/data.csv')
 y = df_words['label'].values.astype(int)
 
-print(y, y.shape)
-
 s_idx = np.array(range(len(y))).astype(int)
 skf = StratifiedKFold(n_splits=n_splits, random_state=1410, shuffle=True)
+base_clf = MLPClassifier(random_state=1410)
+print(base_clf)
 
 # Extraction loop
 for key in keys:
@@ -33,41 +35,72 @@ for key in keys:
     for i, base in enumerate(i_s):
         print("## Base %s" % base)
         for repeat in range(n_repeats):
+            print("### Repeat %i" % repeat)
             for q_id, quantity in enumerate(quantities):
                 print("#### Quantity %.2f [%i]" % (quantity, q_id))
                 # Quantity resampling
-
-                greentable = np.zeros((n_range, n_range))
-
-                print("### Repeat %i" % repeat)
                 resampled = resample(s_idx, n_samples=int(len(y)*quantity),
                                      replace=False, stratify=y,
                                      random_state=random_state + repeat)
 
+                # print(resampled.shape)
                 for fold, (train, test) in enumerate(skf.split(y[resampled],
                                                                y[resampled])):
                     print("##### Fold %i" % fold)
-
-
-                    filename = "%i_%i_%i_%s_%s" % (repeat, q_id, fold, key, i_s[i])
-
-
-                    preds = np.load("predictions/%s.npy" % filename)
-                    probas = np.load("probas/%s.npy" % filename)
-
-
-                    ngram_idx = 0
-                    # print("HERE, KURWA!", preds.shape)
+                    preds = []
+                    probas = []
                     for n_start in range(n_range):
                         for n_end in range(n_range):
                             if n_start <= n_end:
-                                # print(n_start, n_end, "TU IDX %i" % ngram_idx)
-                                y_pred = preds[ngram_idx]
-                                score = balanced_accuracy_score(y[resampled][test],y_pred)
+                                n_ran = (n_start+1, n_end+1)
 
-                                greentable[n_start, n_end] += score
+                                filename = "%i_%i_%i_%s_%s_%i_%i" % (repeat, q_id, fold, key, i_s[i], *n_ran)
 
-                                ngram_idx += 1
+                                """
+                                X = np.load("extracted/%s.npy" % filename, allow_pickle=True)[()].A
 
-            print(greentable)
-            exit()
+                                # print(X.shape)
+
+                                clf = clone(base_clf)
+                                clf.fit(X[train], y[resampled][train])
+
+                                y_pred = clf.predict(X[test])
+                                proba = clf.predict_proba(X[test])
+
+                                score = balanced_accuracy_score(y[resampled][test], y_pred)
+
+                                print("%.3f | %s" % (score, filename), y_pred.shape)
+
+                                preds.append(y_pred)
+                                probas.append(proba)
+
+                                X = None
+                                """
+                    preds = np.load("predictions/%s.npy" % filename[:-4])
+                    probas = np.load("probas/%s.npy" % filename[:-4])
+
+                    #preds = np.array(preds)
+                    #probas = np.array(probas)
+                    print(preds.shape, probas.shape)
+                    print(filename[:-4], "%.3f" % np.std(preds), preds.shape, probas.shape)
+                    # np.save("predictions/%s" % filename[:-4], preds)
+                    # np.save("probas/%s" % filename[:-4], probas)
+
+                    n_idxx = 0
+                    for n_start in range(n_range):
+                        for n_end in range(n_range):
+                            if n_start <= n_end:
+                                y_pred = preds[n_idxx]
+                                proba = probas[n_idxx]
+                                #preds.append(y_pred)
+                                #probas.append(proba)
+
+                                score = balanced_accuracy_score(y[resampled][test], y_pred)
+
+                                print("%.3f | %s" % (score, filename), y_pred.shape)
+
+                                n_idxx += 1
+
+
+
+                resampled = None
