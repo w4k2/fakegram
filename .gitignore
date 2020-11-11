@@ -1,7 +1,6 @@
 .DS_Store
 data/*.npz
 results/green_probas.npy
-results/green_ytest.npy
 metex.py
 example.png
 example.py

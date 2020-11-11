@@ -33,7 +33,7 @@ print(base_clf)
 # KEYS x EXTRACTOR x REPEATS x FOLDS x QUANTITIES x FROM x TO
 scores = np.zeros((len(keys), len(i_s), n_repeats, n_splits, len(quantities), n_range, n_range))
 probas_array = np.zeros((len(keys), len(i_s), n_repeats, n_splits, len(quantities), n_range, n_range), dtype=object)
-ytest_array = np.zeros((len(keys), len(i_s), n_repeats, n_splits, len(quantities), n_range, n_range), dtype=object)
+ytest_array = np.zeros((n_repeats, n_splits, len(quantities)), dtype=object)
 
 print(scores.shape)
 
@@ -95,8 +95,7 @@ for key_id, key in enumerate(keys):
                                        n_start, n_end] = score
                                 probas_array[key_id, i, repeat, fold, q_id,
                                        n_start, n_end] = proba
-                                ytest_array[key_id, i, repeat, fold, q_id,
-                                       n_start, n_end] = y[resampled][test]
+                                ytest_array[repeat, fold, q_id] = y[resampled][test]
 
                                 n_idxx += 1
 
