@@ -5,8 +5,6 @@ from sklearn.metrics import balanced_accuracy_score
 
 keys = ['text', 'author', 'title']
 i_s = ['words', 'struct']
-n_range = 6
-ranger = np.array(range(n_range)) + 1
 quantities = np.array([.02, .05, .1, .25, .40])
 
 
