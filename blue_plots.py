@@ -7,6 +7,8 @@ keys = ['text', 'author', 'title']
 i_s = ['words', 'struct']
 quantities = np.array([.02, .05, .1, .25, .40])
 
+# Container for statistical analysis
+stat_table = []
 
 # KEYS x EXTRACTOR x REPEATS x FOLDS x QUANTITIES x FROM x TO
 scores = np.load("results/green.npy")
@@ -62,6 +64,8 @@ for key_id, key in enumerate(keys):
             fold_scores[1,i] = balanced_accuracy_score(y_test[i], pred_s)
             fold_scores[2,i] = balanced_accuracy_score(y_test[i], pred_e)
         plot_scores.append(np.mean(fold_scores, axis=1))
+        if q_id == 4:
+            stat_table.append(fold_scores)
     plot_scores = np.array(plot_scores).T
 
     # Lets make some plots
@@ -83,8 +87,6 @@ for key_id, key in enumerate(keys):
     plt.grid(ls="--", color=(0.85, 0.85, 0.85))
     plt.tight_layout()
     plt.savefig("figures/%s_blueplot.png" % key, dpi=200)
-
-
 """
 Plots by extractor
 """
@@ -113,6 +115,8 @@ for extractor_id, extractor in enumerate(i_s):
             fold_scores[2,i] = balanced_accuracy_score(y_test[i], pred_ttl)
             fold_scores[3,i] = balanced_accuracy_score(y_test[i], pred_e)
         plot_scores.append(np.mean(fold_scores, axis=1))
+        if q_id == 4:
+            stat_table.append(fold_scores)
     plot_scores = np.array(plot_scores).T
 
     # Lets make some plots
@@ -177,6 +181,8 @@ for q_id, quantity in enumerate(quantities):
         fold_scores[6,i] = balanced_accuracy_score(y_test[i], pred_e_w)
         fold_scores[7,i] = balanced_accuracy_score(y_test[i], pred_e_s)
     plot_scores.append(np.mean(fold_scores, axis=1))
+    if q_id == 4:
+        stat_table.append(fold_scores)
     stds.append(np.std(fold_scores, axis=1))
 plot_scores = np.array(plot_scores).T
 stds = np.array(stds).T
@@ -203,3 +209,6 @@ plt.legend()
 plt.grid(ls="--", color=(0.85, 0.85, 0.85))
 plt.tight_layout()
 plt.savefig("figures/ensemble6_blueplot.png", dpi=200)
+
+stat_table = np.array(stat_table)
+np.save("results/blue_stat", stat_table)
