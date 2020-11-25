@@ -2,18 +2,36 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import balanced_accuracy_score
 
-
 keys = ['text', 'author', 'title']
 i_s = ['words', 'struct']
 quantities = np.array([.02, .05, .1, .25, .40])
+GOLDEN = 1.61803399
+
+
+blue = "#5555FF"
+black = "#555555"
+red = "#FF5555"
+
+bluec = "#AAAAFF"
+blackc = "#AAAAAA"
+redc = "#FFAAAA"
+
+c_1 = [black, black, black]
+ls_1 = [":", "--", "-"]
+
+c_2 = [black, black, black, black]
+ls_2 = [":", "--", "-.", "-"]
+
 
 # Container for statistical analysis
 stat_table = []
 
 # KEYS x EXTRACTOR x REPEATS x FOLDS x QUANTITIES x FROM x TO
 scores = np.load("results/green.npy")
+
 # KEYS x EXTRACTOR x REPEATS x FOLDS x QUANTITIES x FROM x TO
 probas = np.load("results/green_probas.npy", allow_pickle=True)
+
 # REPEATS x FOLDS x QUANTITIES -> REPEATS * FOLDS x QUANTITIES
 y_true = np.load("results/green_ytest.npy", allow_pickle=True).reshape(10,5)
 
@@ -22,8 +40,8 @@ Finding best n-gram range
 """
 # KEYS x EXTRACTOR x QUANTITIES x FROM x TO
 scores = np.mean(scores, axis=(2,3))
-# N_TABLES x x REPEATS x FOLDS
 
+# N_TABLES x x REPEATS x FOLDS
 # QUANTITIES x KEYS x EXTRACTOR
 best_probas = np.zeros((5, 3, 2), dtype=object)
 
@@ -32,10 +50,10 @@ n_to = []
 for q_id, quantity in enumerate(quantities):
     for key_id, key in enumerate(keys):
         for extractor_id, i in enumerate(i_s):
-            # print(q_id, key_id, extractor_id)
+
             green_score = scores[key_id, extractor_id, q_id]
             best_clf = np.argwhere(green_score==green_score.max())
-            # print("NAJLEPSZY:\n", best_clf)
+
             n_from.append(best_clf[0,0])
             n_to.append(best_clf[0,1])
             best_probas[q_id, key_id, extractor_id] = probas[key_id, extractor_id, :, :, q_id, best_clf[0,0], best_clf[0,1]]
@@ -71,22 +89,34 @@ for key_id, key in enumerate(keys):
     # Lets make some plots
     labels = ['words', 'struct', 'ensemble']
     ls = [":", "--", "-"]
-    fig = plt.figure(figsize=(10, 5))
+    fig, ax = plt.subplots(1,1,figsize=(6, 6/GOLDEN))
     for i in range(plot_scores.shape[0]):
-        plt.plot(plot_scores[i], color='blue', ls=ls[i], label=labels[i])
+        ax.plot(quantities, plot_scores[i], color=c_1[i], ls=ls_1[i], label=labels[i])
         # Annotate
+        """
         xytext = [(0,-10), (0,10), (0,10)]
         for j in range(plot_scores[i].shape[0]):
             plt.annotate(str(round(plot_scores[i][j], 3)), (j,plot_scores[i][j]), textcoords="offset points", xytext=xytext[i], ha='center', fontsize=6)
+        """
 
-    plt.ylim(0.5, 1.0)
-    plt.xticks([i for i in range(quantities.shape[0])], [str(type) for type in quantities])
-    # plt.xlim(0, 4)
-    plt.title(key)
-    plt.legend()
-    plt.grid(ls="--", color=(0.85, 0.85, 0.85))
+    ax.set_ylim(0.5, 1.0)
+    ax.set_xlim(np.min(quantities), np.max(quantities))
+    ax.set_xticks(quantities)#, [str(type) for type in quantities])
+
+    ax.set_title("%s feature" % key, fontsize=12)
+    ax.legend(frameon=False,ncol=3,loc=9)
+    ax.grid(ls=":", color=(0.85, 0.85, 0.85))
+
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+
+    ax.set_xlabel('quantity of samples used for extraction and training', fontsize=10)
+    ax.set_ylabel('balanced accuracy score', fontsize=10)
+
     plt.tight_layout()
     plt.savefig("figures/%s_blueplot.png" % key, dpi=200)
+    plt.savefig("figures/%s_blueplot.eps" % key, dpi=200)
+
 """
 Plots by extractor
 """
@@ -122,24 +152,44 @@ for extractor_id, extractor in enumerate(i_s):
     # Lets make some plots
     labels = ['text', 'author', 'title', 'ensemble']
     ls = [":", "--", "-.", "-"]
-    fig = plt.figure(figsize=(10, 5))
+    fig, ax = plt.subplots(1,1,figsize=(6, 6/GOLDEN))
+
     for i in range(plot_scores.shape[0]):
-        plt.plot(plot_scores[i], color='blue', ls=ls[i], label=labels[i])
+        ax.plot(quantities, plot_scores[i], ls=ls_2[i], label=labels[i], color=c_2[i])
         # Annotate
+        """
         xytext = [(0,5), (0,5), (0,5), (0,5)]
         for j in range(plot_scores[i].shape[0]):
             plt.annotate(str(round(plot_scores[i][j], 3)), (j,plot_scores[i][j]), textcoords="offset points", xytext=xytext[i], ha='center', fontsize=6)
+        """
 
+
+    ax.set_ylim(0.5, 1.0)
+    ax.set_xlim(np.min(quantities), np.max(quantities))
+    ax.set_xticks(quantities)#, [str(type) for type in quantities])
+
+    ax.set_title("%s extractor" % extractor, fontsize=12)
+    ax.legend(frameon=False,ncol=4,loc=9,fontsize=8)
+    ax.grid(ls=":", color=(0.85, 0.85, 0.85))
+
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+
+    ax.set_xlabel('quantity of samples used for extraction and training', fontsize=10)
+    ax.set_ylabel('balanced accuracy score', fontsize=10)
+
+    """
     plt.ylim(0.5, 1.0)
     plt.xticks([i for i in range(quantities.shape[0])], [str(type) for type in quantities])
     # plt.xlim(0, 4)
     plt.title(extractor)
     plt.legend()
     plt.grid(ls="--", color=(0.85, 0.85, 0.85))
+    """
     plt.tight_layout()
     plt.savefig("figures/%s_blueplot.png" % extractor, dpi=200)
-    plt.savefig("figures/%s_blueplot.eps" % extractor)
 
+#exit()
 """
 Ensemble of 6
 """
@@ -186,31 +236,62 @@ for q_id, quantity in enumerate(quantities):
         stat_table.append(fold_scores)
     stds.append(np.std(fold_scores, axis=1))
 plot_scores = np.array(plot_scores).T
+add = [0,3,1,4,2,5,6,7,8]
+plot_scores = plot_scores[add]
 stds = np.array(stds).T
 
 # Lets make some plots
-labels = ['text_w', 'author_w', 'title_w','text_s', 'author_s', 'title_s', 'ensemble_w', 'ensemble_s', 'ensemble_all']
+labels = ['text', 'author', 'title','text', 'author', 'title', 'ensemble', 'ensemble', 'ensemble']
+
 ls = [":", "--", "-.",":", "--", "-.", "-", "-", "-"]
-colors = ["blue", "blue", "blue", "red", "red", "red", "blue", "red", "black"]
-alphas = [.4,.4,.4,.4,.4,.4,1.0,1.0,1.0]
-fig = plt.figure(figsize=(10, 5))
+colors = [bluec, bluec, bluec, redc, redc, redc, blue, red, black]
+
+lw = [1,1,1,1,1,1,1,1,1]
+
+labels = [labels[_] for _ in add]
+ls = [ls[_] for _ in add]
+colors = [colors[_] for _ in add]
+lw = [lw[_] for _ in add]
+
+#fig = plt.figure(figsize=(10, 5))
+fig, ax = plt.subplots(1,1,figsize=(6, 6/GOLDEN))
 for i in range(plot_scores.shape[0]):
-    plt.plot(plot_scores[i], color=colors[i], ls=ls[i], label=labels[i], alpha=alphas[i])
+    ax.plot(quantities, plot_scores[i], color=colors[i], ls=ls[i], label=labels[i], lw=lw[i])
     # # Annotate
+    """
     xytext = [(0,5), (0,5), (0,5), (0,5), (0,5), (0,5), (0,-10), (0,5), (0,10)]
     for j in range(plot_scores[i].shape[0]):
         if i == 6 or i == 7 or i == 8:
             plt.annotate((str(round(plot_scores[i][j], 3))+"+"+str(round(stds[i][j], 3))), (j,plot_scores[i][j]), textcoords="offset points", xytext=xytext[i], ha='center', fontsize=4)
+    """
 
+"""
 plt.ylim(0.5, 1.0)
 plt.xticks([i for i in range(quantities.shape[0])], [str(type) for type in quantities])
 # plt.xlim(0, 4)
 plt.title("Ensemble of 6")
 plt.legend()
 plt.grid(ls="--", color=(0.85, 0.85, 0.85))
+"""
+
+ax.set_ylim(0.5, 1.0)
+ax.set_xlim(np.min(quantities), np.max(quantities))
+ax.set_xticks(quantities)#, [str(type) for type in quantities])
+
+#ax.set_title("%s extractor" % extractor, fontsize=12)
+l = ax.legend(frameon=False,ncol=5,loc=8,fontsize=8)
+for i, text in enumerate(l.get_texts()):
+    text.set_color(colors[i])
+ax.grid(ls=":", color=(0.85, 0.85, 0.85))
+
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
+
+ax.set_xlabel('quantity of samples used for extraction and training', fontsize=10)
+ax.set_ylabel('balanced accuracy score', fontsize=10)
+
 plt.tight_layout()
 plt.savefig("figures/ensemble6_blueplot.png", dpi=200)
-plt.savefig("figures/ensemble6_blueplot.eps")
 
 stat_table = np.array(stat_table)
 np.save("results/blue_stat", stat_table)
