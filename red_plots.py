@@ -31,17 +31,17 @@ for key_id, key in enumerate(keys):
         for q_id, quantity in enumerate(quantities):
             print("# Quantity: %s" % quantity)
             y_test = y_true[:, :, q_id].reshape(10,)
-            words_probas = probas[key_id, extractor_id, :, :, q_id].reshape(10,)
+            current_probas = probas[key_id, extractor_id, :, :, q_id].reshape(10,)
 
             fold_scores = np.zeros(10)
             for i in range(10):
-                pred_w = np.argmax(words_probas[i], axis=1)
+                pred_w = np.argmax(current_probas[i], axis=1)
                 fold_scores[i] = balanced_accuracy_score(y_test[i], pred_w)
             plot_scores.append(np.mean(fold_scores))
         plot_scores = np.array(plot_scores).T
 
         fig = plt.figure(figsize=(10, 5))
-        plt.plot(plot_scores, color='red', label='words')
+        plt.plot(plot_scores, color='red', label=extractor)
 
         # Annotate
         xytext = [(0,-10), (0,10), (0,10)]
@@ -114,8 +114,6 @@ for i in range(plot_scores.shape[0]):
     xytext = [(0,5), (0,5), (0,5), (0,5), (0,5), (0,5), (0,-10), (0,5), (0,10)]
     for j in range(plot_scores[i].shape[0]):
         plt.annotate(str(round(plot_scores[i][j], 3)), (j,plot_scores[i][j]), textcoords="offset points", xytext=xytext[i], ha='center', fontsize=6)
-#        plt.annotate((str(round(plot_scores[i][j], 3))+"+"+str(round(stds[i][j], 3))), (j,plot_scores[i][j]), textcoords="offset points", xytext=xytext[i], ha='center', fontsize=4)
-
 
 plt.ylim(0.5, 1.0)
 plt.title("Ensamble of 6")
