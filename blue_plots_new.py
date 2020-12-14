@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import balanced_accuracy_score
 
+final_plots_scores = []
+
 keys = ['text', 'author', 'title']
 i_s = ['words', 'af']
 quantities = np.array([.02, .05, .1, .25, .40])
@@ -32,16 +34,18 @@ stat_table = []
 
 # KEYS x EXTRACTOR x REPEATS x FOLDS x QUANTITIES x FROM x TO
 scores = np.load("results/green.npy")
-
 # KEYS x EXTRACTOR x REPEATS x FOLDS x QUANTITIES x FROM x TO
 probas = np.load("results/green_probas.npy", allow_pickle=True)
 
 # REPEATS x FOLDS x QUANTITIES -> REPEATS * FOLDS x QUANTITIES
 y_true = np.load("results/green_ytest.npy", allow_pickle=True).reshape(10,5)
-
 """
 Finding best n-gram range
 """
+# KEYS x EXTRACTOR x FOLDS x QUANTITIES x FROM x TO
+last_probas = probas.reshape(3,2,10,5,6,6)
+# print(last_probas.shape)
+# exit()
 # KEYS x EXTRACTOR x QUANTITIES x FROM x TO
 scores = np.mean(scores, axis=(2,3))
 
@@ -62,6 +66,55 @@ for q_id, quantity in enumerate(quantities):
             n_to.append(best_clf[0,1])
             best_probas[q_id, key_id, extractor_id] = probas[key_id, extractor_id, :, :, q_id, best_clf[0,0], best_clf[0,1]]
 
+# KEYS x EXTRACTOR
+uni_scores = last_probas[:, :, :, 4, 0, 0]
+bi_scores = last_probas[:, :, :, 4, 1, 1]
+# Get unigrams and bigrams
+last_probas_uni = []
+last_probas_bi = []
+last_probas_all = []
+for extractor_id, i in enumerate(i_s):
+    for key_id, key in enumerate(keys):
+        uni = uni_scores[key_id, extractor_id]
+        bi = bi_scores[key_id, extractor_id]
+        last_probas_uni.append(uni)
+        last_probas_bi.append(bi)
+last_probas_all.append(last_probas_uni)
+last_probas_all.append(last_probas_bi)
+last_probas_all = np.array(last_probas_all)
+# UNI/BI x METHOD x FOLDS
+# print(last_probas_all.shape)
+
+"""
+Unigrams and bigrams plots by extractor
+"""
+# """
+fig, ax = plt.subplots(1,2,figsize=(11, 4), sharey=True)
+y_true = np.load("results/green_ytest.npy", allow_pickle=True).reshape(10,5)
+last_scores = []
+for type in range(last_probas_all.shape[0]):
+    # METHOD x FOLDS
+    type_probas = last_probas_all[type]
+    words_probas = type_probas[:3, :]
+    struct_probas = type_probas[3:, :]
+
+    words_e = np.mean(words_probas, axis=0)
+    struct_e = np.mean(struct_probas, axis=0)
+
+    y_test = y_true[:, 4]
+    for fold in range(10):
+        pred_words_e = np.argmax(words_e[fold], axis=1)
+        pred_struct_e = np.argmax(struct_e[fold], axis=1)
+        last_scores.append(balanced_accuracy_score(y_test[fold], pred_words_e))
+        last_scores.append(balanced_accuracy_score(y_test[fold], pred_struct_e))
+
+last_scores = np.array(last_scores).reshape(4,10)
+print(last_scores)
+final_plots_scores = np.load("final_plots_scores.npy")
+final_plots_scores = np.concatenate((final_plots_scores, last_scores), axis=0)
+np.save("final_plots_scores", final_plots_scores)
+print(final_plots_scores.shape)
+exit()
 """
 Plots by key
 """
@@ -237,7 +290,15 @@ for q_id, quantity in enumerate(quantities):
     plot_stds.append(np.std(fold_scores, axis=1))
     if q_id == 4:
         stat_table.append(fold_scores)
+        # WORDS, STRUCT, ALL
+        final_plots_scores.append(fold_scores[6])
+        final_plots_scores.append(fold_scores[7])
+        final_plots_scores.append(fold_scores[8])
     stds.append(np.std(fold_scores, axis=1))
+
+final_plots_scores = np.array(final_plots_scores)
+np.save("final_plots_scores", final_plots_scores)
+
 plot_scores = np.array(plot_scores).T
 plot_stds = np.array(plot_stds).T
 add = [0,3,1,4,2,5,6,7,8]
