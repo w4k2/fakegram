@@ -88,33 +88,33 @@ last_probas_all = np.array(last_probas_all)
 """
 Unigrams and bigrams plots by extractor
 """
-# """
-fig, ax = plt.subplots(1,2,figsize=(11, 4), sharey=True)
-y_true = np.load("results/green_ytest.npy", allow_pickle=True).reshape(10,5)
-last_scores = []
-for type in range(last_probas_all.shape[0]):
-    # METHOD x FOLDS
-    type_probas = last_probas_all[type]
-    words_probas = type_probas[:3, :]
-    struct_probas = type_probas[3:, :]
-
-    words_e = np.mean(words_probas, axis=0)
-    struct_e = np.mean(struct_probas, axis=0)
-
-    y_test = y_true[:, 4]
-    for fold in range(10):
-        pred_words_e = np.argmax(words_e[fold], axis=1)
-        pred_struct_e = np.argmax(struct_e[fold], axis=1)
-        last_scores.append(balanced_accuracy_score(y_test[fold], pred_words_e))
-        last_scores.append(balanced_accuracy_score(y_test[fold], pred_struct_e))
-
-last_scores = np.array(last_scores).reshape(4,10)
-print(last_scores)
-final_plots_scores = np.load("final_plots_scores.npy")
-final_plots_scores = np.concatenate((final_plots_scores, last_scores), axis=0)
-np.save("final_plots_scores", final_plots_scores)
-print(final_plots_scores.shape)
-exit()
+# Zakomentowane, zeby nie popsuc
+# fig, ax = plt.subplots(1,2,figsize=(11, 4), sharey=True)
+# y_true = np.load("results/green_ytest.npy", allow_pickle=True).reshape(10,5)
+# last_scores = []
+# for type in range(last_probas_all.shape[0]):
+#     # METHOD x FOLDS
+#     type_probas = last_probas_all[type]
+#     words_probas = type_probas[:3, :]
+#     struct_probas = type_probas[3:, :]
+#
+#     words_e = np.mean(words_probas, axis=0)
+#     struct_e = np.mean(struct_probas, axis=0)
+#
+#     y_test = y_true[:, 4]
+#     for fold in range(10):
+#         pred_words_e = np.argmax(words_e[fold], axis=1)
+#         pred_struct_e = np.argmax(struct_e[fold], axis=1)
+#         last_scores.append(balanced_accuracy_score(y_test[fold], pred_words_e))
+#         last_scores.append(balanced_accuracy_score(y_test[fold], pred_struct_e))
+#
+# last_scores = np.array(last_scores).reshape(4,10)
+# print(last_scores)
+# final_plots_scores = np.load("final_plots_scores.npy")
+# final_plots_scores = np.concatenate((last_scores, final_plots_scores), axis=0)
+# np.save("final_plots_scores", final_plots_scores)
+# print(final_plots_scores.shape)
+# exit()
 """
 Plots by key
 """
@@ -296,8 +296,9 @@ for q_id, quantity in enumerate(quantities):
         final_plots_scores.append(fold_scores[8])
     stds.append(np.std(fold_scores, axis=1))
 
-final_plots_scores = np.array(final_plots_scores)
-np.save("final_plots_scores", final_plots_scores)
+# Zakomentowane, zeby nie popsuc
+# final_plots_scores = np.array(final_plots_scores)
+# np.save("final_plots_scores", final_plots_scores)
 
 plot_scores = np.array(plot_scores).T
 plot_stds = np.array(plot_stds).T

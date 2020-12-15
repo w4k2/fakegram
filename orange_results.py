@@ -123,3 +123,10 @@ print("## Ensemble")
 print("Words scores: %s" % np.mean(fold_scores[0]))
 print("Struct scores: %s" % np.mean(fold_scores[1]))
 print("Ensemble cores: %s" % np.mean(fold_scores[2]))
+
+print(fold_scores.shape)
+# Zakomentowane, zeby nie popsuc
+# final_plots_scores = np.load("final_plots_scores.npy")
+# final_plots_scores = np.concatenate((final_plots_scores, fold_scores), axis=0)
+# np.save("final_plots_scores", final_plots_scores)
+# print(final_plots_scores.shape)
