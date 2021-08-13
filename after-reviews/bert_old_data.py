@@ -69,6 +69,7 @@ for key_id, key in enumerate(keys):
 
         print("RESAMPLE")
         X_s, y_s = resample(X, y, n_samples=6400, replace=False, stratify=y, random_state=random_state + repeat)
+        print("GOT", X.shape, y.shape)
 
         # Probas container
         probas = []
@@ -76,6 +77,8 @@ for key_id, key in enumerate(keys):
             print("GET AND CONVERT TO CATEGORICAL [%i]" % fold_id)
             X_train, X_test = X_s[train], X_s[test]
             y_train, y_test = y_s[train], y_s[test]
+
+            print("TRAIN", X_train.shape, "TEST", X_test.shape)
 
             # t to categorical
             y_train_c = tf.keras.utils.to_categorical(y_train)
