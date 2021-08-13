@@ -8,7 +8,7 @@ from official.nlp import optimization
 from strlearn.metrics import balanced_accuracy_score
 
 
-df = pd.read_csv('data/data.csv')
+df = pd.read_csv('../data/data.csv')
 # U because of nan
 X_title = df["title"].to_numpy().astype('U')
 y_n = df["label"]

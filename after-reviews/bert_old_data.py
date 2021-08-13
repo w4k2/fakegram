@@ -15,6 +15,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.utils import resample
 from strlearn.metrics import balanced_accuracy_score
 
+print("IMPORTS")
 
 """
 BERT definition
@@ -22,6 +23,8 @@ BERT definition
 bert_model_name = 'small_bert/bert_en_uncased_L-4_H-512_A-8'
 tfhub_handle_encoder = handle(bert_model_name)
 tfhub_handle_preprocess = preprocess(bert_model_name)
+
+print("PREPROCESSED")
 
 def build_classifier_model():
   text_input = tf.keras.layers.Input(shape=(), dtype=tf.string, name='text')
@@ -45,9 +48,12 @@ quantity = .01
 random_state = 1410
 
 # Load CSV
+print("LOAD CSV")
 df_words = pd.read_csv('../data/data.csv')
 # y to categorical
 y = df_words['label'].values.astype(int)
+print("LOADED")
+
 
 # CV
 rskf = StratifiedKFold(
@@ -55,14 +61,19 @@ rskf = StratifiedKFold(
 
 for key_id, key in enumerate(keys):
     # U because of nan
+    print("DF-to-numpy %s" % key)
     X = df_words[key].to_numpy().astype('U')
 
     for repeat in range(n_repeats):
-        X_s, y_s = resample(X, y, n_samples=int(len(y)*quantity), replace=False, stratify=y, random_state=random_state + repeat)
+        #X_s, y_s = resample(X, y, n_samples=int(len(y)*quantity), replace=False, stratify=y, random_state=random_state + repeat)
+
+        print("RESAMPLE")
+        X_s, y_s = resample(X, y, n_samples=6400, replace=False, stratify=y, random_state=random_state + repeat)
 
         # Probas container
         probas = []
         for fold_id, (train, test) in enumerate(rskf.split(X_s, y_s)):
+            print("GET AND CONVERT TO CATEGORICAL [%i]" % fold_id)
             X_train, X_test = X_s[train], X_s[test]
             y_train, y_test = y_s[train], y_s[test]
 
@@ -71,6 +82,7 @@ for key_id, key in enumerate(keys):
             y_test_c = tf.keras.utils.to_categorical(y_test)
 
             # BERT model
+            print("BUILD MODEL")
             clf = build_classifier_model()
             loss = tf.keras.losses.CategoricalCrossentropy(from_logits=False)
             metrics = tf.metrics.CategoricalAccuracy()
@@ -87,8 +99,10 @@ for key_id, key in enumerate(keys):
                 optimizer_type='adamw'
             )
 
+            print("COMPILE MODEL")
             clf.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
+            print("FIT")
             history = clf.fit(
                 x=X_train,
                 y = y_train_c,
@@ -96,13 +110,13 @@ for key_id, key in enumerate(keys):
                 epochs=epochs
             )
 
+            print("PREDICT")
             proba = clf.predict(X_test)
             # pred = np.argmax(proba, axis=1)
             # score = balanced_accuracy_score(y_test, pred)
             # print(score)
             # exit()
             probas.append(proba)
+            print("--- nowa runda ---")
         probas = np.array(probas)
         np.save("probas/%i_%s_old" % (repeat, key), probas)
-        # print(probas.shape)
-        # exit()
