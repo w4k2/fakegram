@@ -59,11 +59,12 @@ for key_id, key in enumerate(keys):
     X = df_words[key].to_numpy().astype('U')
 
     for repeat in range(n_repeats):
-        X_s, y_s = resample(X, y, n_samples=int(len(y)*quantity), replace=False, stratify=y, random_state=random_state + repeat)
+        X_s, y_s = resample(X, y, n_samples=6400, replace=False, stratify=y, random_state=random_state + repeat)
 
         # Probas container
         probas = []
         for fold_id, (train, test) in enumerate(rskf.split(X_s, y_s)):
+            print(key, repeat, fold_id)
             X_train, X_test = X_s[train], X_s[test]
             y_train, y_test = y_s[train], y_s[test]
 
