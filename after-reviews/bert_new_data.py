@@ -105,6 +105,6 @@ for key_id, key in enumerate(keys):
             # exit()
             probas.append(proba)
         probas = np.array(probas)
-        np.save("probas/%i_%s_new" % (repeat, key), probas)
+        np.save("probas_bert/%i_%s_new" % (repeat, key), probas)
         # print(probas.shape)
         # exit()

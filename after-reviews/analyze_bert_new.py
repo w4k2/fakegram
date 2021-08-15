@@ -15,7 +15,7 @@ for key in keys:
     fold_scores = []
     for repeat in range(n_repeats):
         y_repeat = y[repeat]
-        proba = np.load("probas/%i_%s_new.npy" % (repeat, key))
+        proba = np.load("probas_bert/%i_%s_new.npy" % (repeat, key))
         pred = np.argmax(proba, axis=2)
 
         for split in range(n_splits):
@@ -35,7 +35,7 @@ for repeat in range(n_repeats):
 
     probas = []
     for key in keys:
-        proba = np.load("probas/%i_%s_new.npy" % (repeat, key))
+        proba = np.load("probas_bert/%i_%s_new.npy" % (repeat, key))
         probas.append(proba)
     probas = np.array(probas)
     proba_mean = np.mean(probas, axis=0)

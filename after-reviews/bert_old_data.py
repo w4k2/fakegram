@@ -122,4 +122,4 @@ for key_id, key in enumerate(keys):
             probas.append(proba)
             print("--- nowa runda ---")
         probas = np.array(probas)
-        np.save("probas/%i_%s_old" % (repeat, key), probas)
+        np.save("probas_bert/%i_%s_old" % (repeat, key), probas)
