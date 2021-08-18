@@ -11,11 +11,17 @@ n_splits = 2
 n_repeats = 5
 
 for dataset in datasets:
-
     y = np.load("all_y_test_%s.npy" % dataset)
     y = y.reshape(n_repeats, n_splits, y.shape[1])
 
     for key in datasets[dataset]:
+        q=10
+        umar = np.linspace(0,.5,q)
+        scores_af = []
+        scores_raw = []
+        helps_af = []
+        helps_raw = []
+
         print("%s fold scores:" % key)
         fold_scores = []
         for repeat in range(n_repeats):
@@ -47,8 +53,6 @@ for dataset in datasets:
                 """
                 help_af = []
                 help_raw = []
-                q=10
-                umar = np.linspace(0,.5,q)
                 print("- HELP RAW WITH AF -")
                 for unsure_margin in umar:
                     raw_unsure = (pp_raw > .5-unsure_margin) * (pp_raw < .5+unsure_margin)
@@ -97,4 +101,33 @@ for dataset in datasets:
                 plt.savefig('figures/%s_%s_%i_%i.png' % (dataset, key, repeat, split))
                 plt.savefig('foo.png')
 
+                # STORE
+
+                scores_af.append(score_af)
+                scores_raw.append(score_raw)
+                helps_af.append(help_af)
+                helps_raw.append(help_raw)
+
                 #exit()
+
+        scores_af = np.array(scores_af)
+        scores_raw = np.array(scores_raw)
+        helps_af = np.array(helps_af)
+        helps_raw = np.array(helps_raw)
+
+        fig, ax = plt.subplots(1,1,figsize=(5,5))
+
+        ax.set_title('[%s | %s]' % (dataset, key))
+
+        ax.plot(umar, np.mean(helps_af, axis=0), c='red', label='AF-help')
+        ax.plot(umar, np.mean(helps_raw, axis=0), c='blue', label='RAW-help')
+        ax.hlines(np.mean(scores_af, axis=0), 0, .5, color='red', ls=":", label='AF')
+        ax.hlines(np.mean(scores_raw, axis=0), 0, .5, color='blue', ls=":", label='RAW')
+
+        ax.legend()
+
+        plt.tight_layout()
+        plt.savefig('figures/%s_%s.png' % (dataset, key))
+        plt.savefig('foo.png')
+
+        #exit()
