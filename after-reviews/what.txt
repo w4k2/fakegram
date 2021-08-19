@@ -1,0 +1,41 @@
+#   410 AF correct : RAW wrong
+110 AF: 15 aaaaaaaaa aaaaaa aa aaaaaa aa aaaaaaaaa aaaa aaaa aaaaaaaaaa
+   RAW: 15 Civilians Killed In Single US Airstrike Have Been Identified
+001 AF: aaaa: aaaa aa aaaaaa: aaaaa aaaa’a 6 aaaaaaaa aaaaa aaaaaaaa aa aaaaa aa aaaaaa aaaa, aaaaaaaaaaaaaaaa aaaaaaa
+   RAW: Life: Life Of Luxury: Elton John’s 6 Favorite Shark Pictures To Stare At During Long, Transcontinental Flights
+001 AF: aaaaa’a aaaaaaaaaa aaa aaaaaa aaaaaaaa aaaa aaaaa-aaaaaa ‘aaaaaaaaaaa’ aa aaaaaaa aaaaa’a aaaaaa
+   RAW: Obama’s Organizing for Action Partners with Soros-Linked ‘Indivisible’ to Disrupt Trump’s Agenda
+001 AF: aaaa: aaaa aaa aaa aaa: a aaaa aaaa aaaa aaa aaaa aaaaaaa aaaa aa aaaaaaaaa aaaa aaaa aaaaaaa aa a aaa aaaaaaaaaa aaaaa
+   RAW: News: Hope For The GOP: A Nude Paul Ryan Has Just Emerged From An Ayahuasca Tent With Visions Of A New Republican Party
+001 AF: aaaaaaa! aaa aaaa 'aaaaaaaaaaaa' aa aaaaaaaaa!
+   RAW: Treason! NYT vows 'rededication' to reporting!
+001 AF: aaaaaaaaaa aaaaaaaaaa aaaaaaaaa aaaaaaaa aaaaaaaa: ‘aaa aaaa aaaa aa aaaa aaaaaaaa aaaaa aaaa aaaa aa 2018’
+   RAW: Investment Strategist Forecasts Collapse Timeline: ‘The Last Gasp Of This Economic Cycle Will Come In 2018’
+110 AF: aaaaaaaaa aaaaaaa aaaaaaaaaaa, aaaaaa aaaaaa aa aaa-aaa aaaa - aaa aaa aaaa aaaaa
+   RAW: Venezuela Muzzles Legislature, Moving Closer to One-Man Rule - The New York Times
+001 AF: aaaaaaaaa aaaa aaaaa: aaaaa aaaa - aaaaaaaaa
+   RAW: Breitbart News Daily: Trump Boom - Breitbart
+001 AF: aaaaaaa aaaa aaaaaaaaa, aaaaaaaaaa aaaaaa aaaa aaaa aaaaaa’a aaaaa-aaaaaaa aaaaa - aaaaaaaaa
+   RAW: Massive ESPN Financial, Subscriber Losses Drag Down Disney’s First-Quarter Sales - Breitbart
+110 AF: aaaaaa aaaaaa: aaa aaaaa aaa aaaaa’a aaaaaaa aa aaaaa aaaaaa aaaa aa aaaaaa aaa aaaaaa aaaa aaaaaa aaaaa aaaaaa aaaaa - aaaaaaaaa
+   RAW: Sports Writer: NFL Great Jim Brown’s Decades of Civil Rights Work is Erased for Saying Nice Things About Donald Trump - Breitbart
+001 AF: aaaaaaa aaaaaa aaaaa aaaaaaa aaaaaaa aaaaaa aaaaa aaaaaaa
+   RAW: Teacher unsure about getting smashed eighth night running
+001 AF: aaaaaaa aaaaaaaaaaaa aaaaa aaaa aaaaa aaaaaa aaa aaaaaaaaaaaa aaaa aaa aaaaaa
+   RAW: Doctors Mysteriously Found Dead After Summit For Breakthrough Cure For Cancer
+001 AF: aaaaaaaaa -- aaaaaa aa aaaaa aaaaaa aaaaaa aaaaa aaaaa aaaaa aaaa aaaa aaaaaa aaaaa ’aaa aaaa aaaaaaaaa’ aaaaaaaaaaa
+   RAW: EXCLUSIVE -- Family of Slain Border Patrol Agent Brian Terry Says Eric Holder Among ’The Real Criminals’ Responsible
+001 AF: aaa aaaaaa aaaaa aaaa aa aaaaaa aaa aaaaaaaa aaaaa
+   RAW: How Donald Trump Will Be Blamed For Economic Crash
+001 AF: aaa: aaaaaaaa aaaaa aaaaa aa aaaaaaa aaaaaaaaaa aaaaaaaa aa aaaaaaaa aaaa - aaaaaaaaa
+   RAW: Pew: American Trust Level in Federal Government Plummets to Historic Lows - Breitbart
+001 AF: aaaaaaaaaa (974)
+   RAW: Newsticker (974)
+001 AF: aaa aaaaa aaaa aaaaa: aaaaaa aaaa aaaaaaaa - aaa aaa aaaa aaaaa
+   RAW: The Lives They Loved: Submit Your Memories - The New York Times
+001 AF: aaaaaaaaa aaaaaaaaaaa aa aaaa, aa aaaaaaaaaa aaaaaaa aaaaaaaa - aaa aaa aaaa aaaaa
+   RAW: Achieving Mindfulness at Work, No Meditation Cushion Required - The New York Times
+001 AF: aaaaaa aaaaaaa’a aaaa aaaa aaa aaaaaaaaaa aaaaaaaaaa aaaaa aa - aaa aaa aaaa aaaaa
+   RAW: Bernie Sanders’s Feud With the Democratic Leadership Heats Up - The New York Times
+001 AF: 115 aaaaaaa aaaaaaaaa aaaaaa aa 30 aaaaaaa
+   RAW: 115 Million Americans Killed In 30 Minutes
