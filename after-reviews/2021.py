@@ -105,21 +105,42 @@ for dataset in datasets:
             """
             fig, ax = plt.subplots(1,2,figsize=(10,5))
 
-            ax[0].hist(af, bins=32, alpha=.5, color='red')
-            ax[0].hist(raw, bins=32, alpha=.5, color='blue')
+            ax[0].hist(af, bins=32, alpha=.5, color='red', label='AF')
+            ax[0].hist(raw, bins=32, alpha=.5, color='blue', label='WORDS')
 
-            ax[0].set_title('AF support distribution [%s | K:%s | F:%i:%i]' % (dataset, 'ensemble', repeat, split))
-
-            ax[1].plot(umar, help_af, c='red', label='AF-help')
-            ax[1].plot(umar, help_raw, c='blue', label='RAW-help')
+            ax[1].plot(umar, help_raw, c='red', label='AF-resolved WORDS')
+            ax[1].plot(umar, help_af, c='blue', label='WORDS-resolved AF')
             ax[1].hlines(score_af, 0, .5, color='red', ls=":", label='AF')
             ax[1].hlines(score_raw, 0, .5, color='blue', ls=":", label='RAW')
 
-            ax[1].legend()
+            """
+            Stylize
+            """
+            ax[0].set_title('Positive class support distribution [%s]' % ('ensemble'))
+            ax[1].set_title('Serial ensemble')
+
+            ax[0].legend(frameon=False)
+            legend = ax[1].legend(ncol=2, loc=8)
+            frame = legend.get_frame()
+            frame.set_facecolor('white')
+            frame.set_edgecolor('white')
+
+
+            for a in ax:
+                a.spines['top'].set_visible(False)
+                a.spines['right'].set_visible(False)
+                a.grid(ls=":")
+
+            ax[0].set_xlabel('Positive class support')
+            ax[1].set_xlabel('Unsure margin')
+            ax[0].set_ylabel('Quantity of samples')
+            ax[1].set_ylabel('Accuracy')
 
             plt.tight_layout()
             plt.savefig('figures/%s_%s_%i_%i.png' % (dataset, 'ensemble', repeat, split))
             plt.savefig('foo.png')
+
+            exit()
 
             # STORE
             scores_af.append(score_af)
