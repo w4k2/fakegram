@@ -21,7 +21,7 @@ quantities = np.array([.02, .05, .1, .25, .40])
 random_state = 1410
 
 print("# Load CSV")
-df_words = pd.read_csv('data/nela-gt-2020.csv', delimiter = "\t")
+df_words = pd.read_csv('data/nela-gt-2020-clean.csv', delimiter = "\t")
 y = df_words['label'].values.astype(int)
 
 s_idx = np.array(range(len(y))).astype(int)
