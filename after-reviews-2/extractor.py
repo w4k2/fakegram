@@ -32,7 +32,7 @@ skf = StratifiedKFold(n_splits=n_splits, random_state=1410, shuffle=True)
 for key in keys:
     # print("Key %s" % key)
     for i, base in enumerate([df_words[key], df_struct[key]]):
-        X = base.values.astype('U')
+        # X = base.values.astype('U')
         for repeat in range(n_repeats):
             print("# Repeat %i" % repeat)
             for q_id, quantity in enumerate(quantities):
@@ -41,7 +41,7 @@ for key in keys:
                 resampled = resample(s_idx, n_samples=int(len(y)*quantity),
                                      replace=False, stratify=y,
                                      random_state=random_state + repeat)
-
+                X = base.values[resampled].astype('U')
                 # print(resampled.shape)
                 for fold, (train, test) in enumerate(skf.split(y[resampled],
                                                                y[resampled])):
@@ -52,9 +52,11 @@ for key in keys:
                                 n_ran = (n_start+1, n_end+1)
                                 extractor = CountVectorizer(max_features=100,
                                                             ngram_range=n_ran)
-                                extractor.fit(X[resampled][train])
+                                # extractor.fit(X[resampled][train])
+                                extractor.fit(X[train])
 
-                                X_transformed = extractor.transform(X[resampled])
+                                # X_transformed = extractor.transform(X[resampled])
+                                X_transformed = extractor.transform(X)
 
                                 filename = "%i_%i_%i_%s_%s_%i_%i" % (repeat, q_id, fold, key, i_s[i], *n_ran)
 
