@@ -17,7 +17,7 @@ i_s = ['words', 'struct']
 n_range = 6
 n_splits = 2
 n_repeats = 5
-quantities = np.array([.02, .05, .1, .25, .40])
+quantities = np.array([.02, .05, .1, .25])
 random_state = 1410
 
 print("# Load CSV")
